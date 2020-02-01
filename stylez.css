@@ -1,37 +1,44 @@
-/* our CSS */
+/* CSS for the Weather-or-not application */
 
 html {
   overflow-x: hidden;
 }
+
 .col-md-4.b {
-    width: 100%;
-    margin: auto;
-    padding-top:5%;
-    /* padding-left: 10%; */
-  }
+  width: 100%;
+  margin: auto;
+  padding-top: 5%;
+}
 
-  
-  body {
-    background-color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
+body {
+  background-color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
- .buttons {
-    margin: auto;
-    padding-top: 4%;
-  }
+.buttons {
+  margin: auto;
+  padding-top: 4%;
+}
 
-  /* .btn.btn-primary {
-    padding-right: 35px;
-    margin-right: 30px;
-    text-align: center;
-  } */
+.row.flights {
+  margin: auto;
+}
 
+#responsiveForm {
+  background-image: url("./images/wideSky2.jpg");
+  background-size: 100% 100%;
+  padding-left: 15%;
+  padding-right: 15%;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  margin-bottom: 4%;
+}
 
-  .row.flights {
-    margin: auto;
-  }
+.form-control {
+  margin-bottom: 15px;
+}
 
+<<<<<<< HEAD
   #responsiveForm{
     background-image: url("./images/wideSky2.jpg");
     background-size: 100% 100%;
@@ -43,76 +50,79 @@ html {
     padding-bottom: 10%;
     margin-bottom: 4%;
   }
-
-  .form-control {
-    margin-bottom: 15px;
-  }
-
-  .col-md-12.b {
-    padding: 0px;
-  }
-
-
+=======
+.col-md-12.b {
+  padding: 0px;
+}
+>>>>>>> eb4d49c8b7bcd2fe8106317ded4bfb20d454968b
 
 
 /* lots of css styles come with the airport autocomplete api */
-  .autocomplete-result {
-    cursor: pointer;
-     }
-    .autocomplete-result:hover {
-      background-color: #f2f2fc; }
-  
-  .autocomplete-results {
-    position: inherit;
-    background-color: #fff;
-    z-index: 100;
-    
-    box-shadow: -2px 3px 18px 0px rgba(0, 0, 0, 0.75); }
-  
+.autocomplete-result {
+  cursor: pointer;
+}
 
-  * {
-    box-sizing: border-box; }
-  
-  .inp {
-    position: relative;
-    margin: auto;
-    width: 100%;
-    max-width: 280px; }
-  
-  .label {
-    position: absolute;
-    top: 16px;
-    left: 0;
-    font-size: 16px;
-    color: #9098A9;
-    font-weight: 500;
-    transform-origin: 0 0;
-    transition: all .2s ease; }
-  
-  .border {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2px;
-    width: 100%;
-    background: #0077FF;
-    transform: scaleX(0);
-    transform-origin: 0 0;
-    transition: all .15s ease; }
-  
+.autocomplete-result:hover {
+  background-color: #f2f2fc;
+}
 
-    input:not(:placeholder-shown) + span {
-      color: #0051ff;
-      transform: translateY(-26px) scale(0.75); }
-    input:focus {
-      background: none;
-      outline: none; }
-      input:focus + span {
-        transform: translateY(-26px) scale(0.75); }
-        input:focus + span + .border {
-          transform: scaleX(1); }
-  
-  
-  
+.autocomplete-results {
+  position: inherit;
+  background-color: #fff;
+  z-index: 100;
 
-  
+  box-shadow: -2px 3px 18px 0px rgba(0, 0, 0, 0.75);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.inp {
+  position: relative;
+  margin: auto;
+  width: 100%;
+  max-width: 280px;
+}
+
+.label {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  font-size: 16px;
+  color: #9098A9;
+  font-weight: 500;
+  transform-origin: 0 0;
+  transition: all .2s ease;
+}
+
+.border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: #0077FF;
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  transition: all .15s ease;
+}
+
+
+input:not(:placeholder-shown)+span {
+  color: #0051ff;
+  transform: translateY(-26px) scale(0.75);
+}
+
+input:focus {
+  background: none;
+  outline: none;
+}
+
+input:focus+span {
+  transform: translateY(-26px) scale(0.75);
+}
+
+input:focus+span+.border {
+  transform: scaleX(1);
+}

@@ -7,13 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Weather-or-not</title>
 
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="stylez.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="./assets/js/app.js"></script>
 </head>
 
 <body>
@@ -88,43 +84,34 @@
     </div>
     <!-- end row of buttons -->
 
-
     <!-- weather table -->
-    <div class="row flights" id="cities">
-
-    </div>
-
+    <div class="row flights" id="cities"></div>
 
     <!-- form section -->
-    <section id="contact class" class="content-section text-center" style="margin:auto">
-
+    <section id="contact-class" class="content-section text-center" style="margin:auto" hidden>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-10 offset-md-1 b">
-                    <form id="responsiveForm" action="">
-
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" id="autocomplete-airport-1" type="search"
-                                placeholder="Departure City" aria-label="Search">
-
-                            <form class="form-inline my-2 my-lg-0">
-                                <input class="form-control mr-sm-2" id="date-input" type="search"
-                                    placeholder="Enter a departure Date" aria-label="Search">
-
-                                <a href="#" class="btn btn-primary" id="search-flights">Search Flights</a>
+                    <form id="responsiveForm" action="" autocomplete="off" validate>
+                        <input class="form-control mr-sm-2" id="autocomplete-airport-1" type="search"
+                            placeholder="Departure City" aria-label="Search" required>
+                        <div class="invalid-feedback">
+                            Valid City is required.
+                        </div>
+                        <input class="form-control mr-sm-2" id="date-input" type="search"
+                            placeholder="Enter a departure Date" aria-label="Search" required>
+                        <div class="invalid-feedback">
+                            Date is required.
+                        </div>
+                        <button class="btn btn-primary btn-lg" type="submit" id="search-flights">Search Flights</button>
                 </div>
                 </form>
             </div>
             <div class="col-md-3"></div>
-        </div>
-        </div>
-
     </section>
 
     <!--Flights table-->
     <div id="flights"></div>
-
-
 
     <!-- footer -->
     <div class="row">
@@ -144,6 +131,8 @@
     </div>
     <!-- end of footer -->
 
+    <!-- Javascript imports -->
+    <!-- Bootstrap and JQuery -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
@@ -154,14 +143,18 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
         </script>
 
+    <!-- Airport autocomplete -->
     <script src="https://cdn.jsdelivr.net/npm/airport-autocomplete-js@latest/dist/index.browser.min.js"></script>
 
+    <!-- date range picker -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
+    <!-- Custom JS -->
     <script src="./assets/js/cities.js"></script>
     <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/form-validation.js"></script>
 
 </body>
 

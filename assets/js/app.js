@@ -1,53 +1,54 @@
+// Variable: matches
+// Holds the cities that match the weather
 var matches = [];
-// Function: search NOAA
-// utilizes the NOAA API to search through the list of cities and compares their upcoming weather to what the user selected
+
+// Function: search NWS
+// utilizes the NWS API to search through the list of cities and compares their upcoming weather to what the user selected
 // Returns: array of cities that matches the weather description
-
-function searchNOAA(weatherDescription) {
-
+function searchNWS(weatherDescription) {
+    // set matches to a blank array
     matches = [];
 
+    // for each city in the city array, search the weather and check to see if there's amatch in the next 7 days
     cities.airportCode.forEach(function (element, index) {
-
+        // set up the query URL
         var queryURL = "https://api.weather.gov/gridpoints/" + cities.cwa[index] + "/" + cities.gridX[index] + "," + cities.gridY[index] + "/forecast";
+
+        // AJAX call to the weather.gov API
         $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-            var flag = false
 
-            var forecast = response.properties.periods;
+            var flag = false; // flag to set true if there is a weather match
+            var forecast = response.properties.periods; // get the next 7 day forecast out of the response
 
-
-
+            // loop through each forecast period 
             forecast.forEach(function (element) {
-                if (element.shortForecast.includes(weatherDescription)) {
-
+                if (element.shortForecast.includes(weatherDescription)) { // if the weather type is in the short description, it's a match
                     if (matches.indexOf(index) === -1) {
                         matches.push(index);
-                        //console.log(matches);
                         flag = true;
-
                     }
                 }
             });
-            if (flag) {
+            if (flag) { // if there's a match, add the weather to the city table
                 let startIndex = 0;
-                var today = new Date();
+                var today = new Date(); // get today's date
 
+                // forcasts are issued twice a day, make sure you're pulling the day forecast and not the night one
                 if (today.getHours() >= 18) {
                     startIndex++;
                 }
                 var tbody = $("<tbody>");
                 var tr = $("<tr>");
 
+                // add the daily weather
                 tr.append($("<td>").html($("<input>")
                     .attr("type", "checkbox")
                     .attr("data-index", index)
                     .addClass("city-select")));
-
                 tr.append($("<td>").text(cities.cityName[index]));
-
                 tr.append($("<td>").text(forecast[startIndex].shortForecast + " " + forecast[startIndex].temperature + "°F"));
                 tr.append($("<td>").text(forecast[startIndex + 2].shortForecast + " " + forecast[startIndex + 2].temperature + "°F"));
                 tr.append($("<td>").text(forecast[startIndex + 4].shortForecast + " " + forecast[startIndex + 4].temperature + "°F"));
@@ -56,15 +57,12 @@ function searchNOAA(weatherDescription) {
                 tr.append($("<td>").text(forecast[startIndex + 10].shortForecast + " " + forecast[startIndex + 10].temperature + "°F"));
                 tr.append($("<td>").text(forecast[startIndex + 12].shortForecast + " " + forecast[startIndex + 12].temperature + "°F"));
                 tbody.append(tr);
+
+                // add the city and weather to the table
                 $("#weather-table").append(tbody);
             }
-
         });
-
-
-
     });
-
 }
 
 
@@ -72,12 +70,9 @@ function searchNOAA(weatherDescription) {
 // use the Skyscanner API to search for the cheapest flights based on the cities selected by the user
 // Returns: array of objects, cities and the cheapest flight found
 function searchFlights(origin, dest, date, city) {
-
-
-    // search skyscanner api for cheapest flight on date
-    // return the cheapest flight 
+    // search Skyscanner Cache API for cheapest flight on date entered
     let url = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/" + origin + "-sky/" + dest + "-sky/" + date;
-    console.log(url);
+    //console.log(url);
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -90,49 +85,56 @@ function searchFlights(origin, dest, date, city) {
         }
     };
 
+    // Make the API call
     $.ajax(settings).done(function (response) {
         console.log(response);
-        var quotes = response.Quotes
-        var places = response.Places
-        let carrier = response.Carriers
 
-        for (var i = 0; i < quotes.length; i++) { //Get price and departure date and time
+        // split out the variables from the response (for more better readability)
+        let quotes = response.Quotes;
+        let places = response.Places;
+        let carriers = response.Carriers;
+
+        for (let i = 0; i < quotes.length; i++) { //Get price and departure date and time
             var quote = quotes[i].MinPrice
             var departdate = quotes[i].OutboundLeg.DepartureDate
             var departdateFix = departdate.slice(0, 10)
             var carrierIdGet = quotes[i].OutboundLeg.CarrierIds[0]
             var directflight = quotes[i].Direct
+            var airportId = quotes[i].OutboundLeg.DestinationId
 
-            for (var i = 0; i < response.Places.length; i++) { //find the destination airport
-                var airportDes = response.Places[i].Name
-
-            }
-            for (var i = 0; i < response.Carriers.length; i++) { //find which airlines are returned
-                if (carrierIdGet === response.Carriers[i].CarrierId) { //getting the correct carrier
-                    var carrierpick = response.Carriers[i].Name
-                    console.log(carrierpick)
+            for (let x = 0; x < places.length; x++) { //find the destination airport
+                if (airportId === places[x].PlaceId) { //getting the correct carrier
+                    var airportDes = places[x].Name;
+                    console.log(airportDes);
                 }
             }
+            for (let y = 0; y < carriers.length; y++) { //find which airlines are returned
+                if (carrierIdGet === carriers[y].CarrierId) { //getting the correct carrier
+                    var carrierpick = carriers[y].Name;
+                    console.log(carrierpick);
+                }
+            }
+
+            // add the quote to do the table 
             var tbody2 = $("<tbody>");
             var tr2 = $("<tr>");
             tr2.append($("<td>").text(""));
             tr2.append($("<td>").text(city));
-            tr2.append($("<td>").text(airportDes));
-            tr2.append($("<td>").text(quote));
+            tr2.append($("<td>").text(airportDes + " (" + dest + ")"));
+            tr2.append($("<td>").text("$" + quote));
             tr2.append($("<td>").text(departdateFix));
-            tr2.append($("<td>").text(directflight));
+            // display a check mark if it's a direct flight
+            if(directflight){
+                tr2.append($("<td>").html("&#x2714"));
+            } else {
+                tr2.append($("<td>").html("&#x2717"));
+            }  
             tr2.append($("<td>").text(carrierpick));
+            tr2.append($("<td>").html($("<a>").attr("href", "https://www.skyscanner.com/transport/flights/" + origin + "/" + dest + "/" + date).text("Book Now").attr("target", "_blank")));
             tbody2.append(tr2);
             $("#flight-table").append(tbody2);
         }
     });
-
-}
-
-// Function displayLowestPrices
-// displays the lowest price flights to the page
-function displayLowestPrices() {
-    $("#cities").html("");
 }
 
 // Function: displayCitiesWeather
@@ -156,8 +158,8 @@ function displayCitiesWeather(id) {
         $("<th>").text("Day 7"));
     heading.append(headingTr);
 
-
-    searchNOAA(id);
+    // Search the NOAA API 
+    searchNWS(id);
 
     table.append(heading);
     tableDiv.append(table);
@@ -165,53 +167,59 @@ function displayCitiesWeather(id) {
     $("#cities").append(tableDiv);
 };
 
-$(".weather-btn").on("click", function () {
+$(".weather-btn").on("click", function (e) {
+    e.preventDefault();
     let id = $(this).attr("id");
     //console.log(id);
     displayCitiesWeather(id);
+    $("#contact-class").removeAttr("hidden");
 });
 
-
+// Search Flights onclick
 $("#search-flights").on("click", function (event) {
-    event.preventDefault();
-    $("#flights").empty()
-    console.log("blah");
-    var tableDiv2 = $("<div>").addClass("col-md-12");
-    var table2 = $("<table>").addClass("table").attr("id", "flight-table");
-    var heading2 = $("<thead>").addClass("thead-dark");
-    var headingTr2 = $("<tr>");
-    headingTr2.append($("<th>"),
-        $("<th>").text("Destination"),
-        $("<th>").text("Destination Airport"),
-        $("<th>").text(" Price ($)"),
-        $("<th>").text("Depature Date (YYYY/MM/DD)"), //change this to user input
-        $("<th>").text("Direct Flight?"),
-        $("<th>").text("Airline"),
-    );
+    // check the validity of the form - if it's valid go ahead and continue
+    if ($("form")[0].checkValidity()) {
+        event.preventDefault();
+        $("#flights").empty()
+        console.log("blah");
+        var tableDiv2 = $("<div>").addClass("col-md-12");
+        var table2 = $("<table>").addClass("table").attr("id", "flight-table");
+        var heading2 = $("<thead>").addClass("thead-dark");
+        var headingTr2 = $("<tr>");
+        headingTr2.append($("<th>"),
+            $("<th>").text("Destination"),
+            $("<th>").text("Destination Airport"),
+            $("<th>").text("Price"),
+            $("<th>").text("Depature Date (YYYY-MM-DD)"), //change this to user input
+            $("<th>").text("Direct Flight?"),
+            $("<th>").text("Airline"),
+            $("<th>").text("")
+        );
 
-    heading2.append(headingTr2);
-    table2.append(heading2);
-    tableDiv2.append(table2);
-    $("#flights").append(tableDiv2);
-    let citiesSelected = [];
-    $("input.city-select:checked").each(function () {
-        let id = $(this).attr("data-index");
-        let origin = $("#autocomplete-airport-1").val().substr(0, 3);
-        
-        let dest = cities.airportCode[id];
-        let date = $("#date-input").val();
-        date = moment(date, 'MM/DD/YYYY').format('YYYY-MM-DD');
-        console.log(origin, date);
-        //let date = "2020-02-10"
-        let city = cities.cityName[id]
-        searchFlights(origin, dest, date, city);
-    });
+        heading2.append(headingTr2);
+        table2.append(heading2);
+        tableDiv2.append(table2);
+        $("#flights").append(tableDiv2);
+        let citiesSelected = [];
+        $("input.city-select:checked").each(function () {
+            let id = $(this).attr("data-index");
+            let origin = $("#autocomplete-airport-1").val().substr(0, 3);
+
+            let dest = cities.airportCode[id];
+            let date = $("#date-input").val();
+            date = moment(date, 'MM/DD/YYYY').format('YYYY-MM-DD');
+            console.log(origin, date);
+            //let date = "2020-02-10"
+            let city = cities.cityName[id]
+            searchFlights(origin, dest, date, city);
+        });
+    } else {
+        console.log("form not valid");
+    }
 });
 
 $(document).ready(function () {
-
-
-    // Example options for Formatting
+    // Set up the airport autocomplete
     var options = {
         formatting: `<div class="$(unique-result)"
                          single-result" 
@@ -220,12 +228,12 @@ $(document).ready(function () {
     };
     AirportInput("autocomplete-airport-1", options);
 
+    //  Set up the daterangepicker
     $("#date-input").daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
         minYear: 1901,
         maxYear: parseInt(moment().format('YYYY'), 10),
         maxDate: moment().add(7, 'days')
-    }, function (start, end, label) {
-    });
+    }, function (start, end, label) {});
 });
